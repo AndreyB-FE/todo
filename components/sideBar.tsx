@@ -9,7 +9,7 @@ interface sideBarProps {}
 
 const sideBar: FC<sideBarProps> = ({}) => {
   const [check, setCheck] = useState(true);
-  const onChange = (state: boolean) => setCheck(!check);
+  const onChange = (check: boolean) => setCheck(!check);
   return (
     <Flex>
       <Icon>
@@ -19,7 +19,7 @@ const sideBar: FC<sideBarProps> = ({}) => {
         <CheckCircle></CheckCircle>
       </Icon>
       <Checkbox
-        checked={check}
+        isChecked={check}
         onChange={onChange}
         label={"Checkbox"}
       ></Checkbox>

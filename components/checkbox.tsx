@@ -3,15 +3,15 @@ import styled from "styled-components";
 
 type checkboxProps = {
   color?: string;
-  checked: any;
+  isChecked: any;
   onChange: any;
   label?: String;
 };
 
 const Checkbox: FC<checkboxProps> = (props) => {
   return (
-    <StyledCheckbox {...props} onClick={() => props.onChange(props.checked)}>
-      <input type="checkbox" checked={props.checked} />
+    <StyledCheckbox {...props} onClick={() => props.onChange(props.isChecked)}>
+      <input type="checkbox" defaultChecked={props.isChecked} />
       <label>{props.label}</label>
     </StyledCheckbox>
   );
