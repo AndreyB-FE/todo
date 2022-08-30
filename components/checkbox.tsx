@@ -3,14 +3,17 @@ import styled from "styled-components";
 
 type checkboxProps = {
   color?: string;
-  isChecked: any;
-  onChange: any;
-  label?: String;
+  isChecked: boolean;
+  clickHandler: Function;
+  label?: string;
 };
 
 const Checkbox: FC<checkboxProps> = (props) => {
   return (
-    <StyledCheckbox {...props} onClick={() => props.onChange(props.isChecked)}>
+    <StyledCheckbox
+      {...props}
+      onClick={() => props.clickHandler(props.isChecked)}
+    >
       <input type="checkbox" defaultChecked={props.isChecked} />
       <label>{props.label}</label>
     </StyledCheckbox>
