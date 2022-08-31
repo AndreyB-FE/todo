@@ -43,7 +43,8 @@ const SideBar: FC<sideBarProps> = ({}) => {
 export default SideBar;
 
 const StyledSideBar = styled.div`
+  z-index: 1;
   display: flex;
-  height: 100vh;
-  box-shadow: 5px 0 5px -2px #888;
+  height: ${(props) => props.theme.height.sides}vh;
+  box-shadow: 5px 0 5px -2px ${(props) => props.theme.colors.shadow};
 `;

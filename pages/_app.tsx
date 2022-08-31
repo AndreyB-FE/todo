@@ -18,7 +18,11 @@ const theme = {
   },
   colors: {
     iconsHover: "#eee",
+    shadow: "#ccc",
     primary: "green",
+  },
+  height: {
+    sides: 94,
   },
 };
 
