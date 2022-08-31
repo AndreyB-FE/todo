@@ -30,6 +30,7 @@ interface iconProps {
   height?: string;
   radius?: string;
   color?: string;
+  clickHandler: Function;
   hintPosition?: "right" | "bottom";
   backgroundImage: string;
 }
@@ -41,6 +42,7 @@ const Icon: FC<iconProps> = (props) => {
       {...props}
       onMouseLeave={() => setIsHovered(false)}
       onMouseEnter={() => setIsHovered(true)}
+      onClick={() => props.clickHandler(props.name)}
     >
       {props.hintPosition && (
         <HoverHint
