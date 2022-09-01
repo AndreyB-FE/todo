@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const StyledHeader = styled.header<headerProps>`
   height: ${(props) => 100 - props.theme.height.sides}vh;
-  box-shadow: 5px 0 5px 2px ${(props) => props.theme.colors.shadow};
+  box-shadow: 0 5px 5px ${(props) => props.theme.colors.shadow};
 `;
 
 interface headerProps {}
