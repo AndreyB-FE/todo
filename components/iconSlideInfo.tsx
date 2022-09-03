@@ -8,7 +8,6 @@ const StyledSlide = styled.div<iconSlideInfoProps>`
   justify-content: center;
   transition: 0.3s;
   width: 250px;
-  border-left: 1px solid #eee;
   padding: 1rem 1rem 0;
 `;
 
