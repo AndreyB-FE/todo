@@ -1,20 +1,18 @@
 import type { FC } from "react";
+import { useState } from "react";
 import styled from "styled-components";
+import Icon from "./icon";
 
 type checkboxProps = {
   color?: string;
-  isChecked: boolean;
-  clickHandler: Function;
   label?: string;
 };
 
 const Checkbox: FC<checkboxProps> = (props) => {
+  const [isChecked, setIsChecked] = useState(true);
   return (
-    <StyledCheckbox
-      {...props}
-      onClick={() => props.clickHandler(props.isChecked)}
-    >
-      <input type="checkbox" defaultChecked={props.isChecked} />
+    <StyledCheckbox {...props} onClick={() => setIsChecked(!isChecked)}>
+      <input type="checkbox" defaultChecked={isChecked} />
       <label>{props.label}</label>
     </StyledCheckbox>
   );
@@ -34,7 +32,7 @@ const StyledCheckbox = styled.div`
       content: "";
       position: absolute;
       left: 0;
-      top: 1px;
+      top: 0 px;
       width: 18px;
       height: 18px;
       border: 1px solid #aaa;

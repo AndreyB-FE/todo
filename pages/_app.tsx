@@ -7,6 +7,7 @@ const Global = createGlobalStyle`
   margin: 0;
   padding: 0;
   box-sozing: border-box;
+  font-family: sans-serif;
 }
 `;
 
@@ -16,7 +17,12 @@ const theme = {
     tablet: "(man-width: 769px) and (min-width: 425px)",
   },
   colors: {
+    iconsHover: "#eee",
+    shadow: "rgba(143, 188, 255,0.5)",
     primary: "green",
+  },
+  height: {
+    sides: 94,
   },
 };
 

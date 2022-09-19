@@ -1,29 +1,50 @@
 import type { FC } from "react";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Flex from "./flex";
 import Icon from "./icon";
-import { CheckCircle } from "@styled-icons/bootstrap/CheckCircle";
-import Checkbox from "./checkbox";
+import IconSlideInfo from "./iconSlideInfo";
+import useClickOutSide from "./hooks/useClickOutSide";
+import styled from "styled-components";
 
 interface sideBarProps {}
 
-const sideBar: FC<sideBarProps> = ({}) => {
-  const [check, setCheck] = useState(true);
-  const clickHandler = (check: boolean) => setCheck(!check);
+const SideBar: FC<sideBarProps> = ({}) => {
+  const [slideName, setSlideName] = useState("");
+  const IconClickHandler = (name: string) => setSlideName(name);
+  const wrapperRef = useRef(null);
+  const clickOutsideHandler = () => setSlideName("");
+  useClickOutSide(wrapperRef, clickOutsideHandler);
   return (
-    <Flex>
-      <Icon>
-        <CheckCircle></CheckCircle>
-      </Icon>
-      <Icon>
-        <CheckCircle></CheckCircle>
-      </Icon>
-      <Checkbox
-        isChecked={check}
-        clickHandler={clickHandler}
-        label={"Checkbox"}
-      ></Checkbox>
-    </Flex>
+    <StyledSideBar ref={wrapperRef}>
+      <Flex direction="column" gap="15px" padding="10px">
+        <Icon
+          name="Notes"
+          backgroundImage="./images/icons8-notes-32.png"
+          hintPosition={"right"}
+          clickHandler={IconClickHandler}
+        />
+        <Icon
+          name="Tasks"
+          backgroundImage="./images/icons8-checkmark-32.png"
+          hintPosition={"right"}
+          clickHandler={IconClickHandler}
+        />
+        <Icon
+          name="Contacts"
+          backgroundImage="./images/icons8-google-contacts-32.png"
+          hintPosition={"right"}
+          clickHandler={IconClickHandler}
+        />
+      </Flex>
+      {slideName && <IconSlideInfo name={slideName}></IconSlideInfo>}
+    </StyledSideBar>
   );
 };
-export default sideBar;
+export default SideBar;
+
+const StyledSideBar = styled.div`
+  background-color: white;
+  display: flex;
+  height: ${(props) => props.theme.height.sides}vh;
+  box-shadow: 5px 5px 5px ${(props) => props.theme.colors.shadow};
+`;

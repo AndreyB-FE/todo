@@ -1,34 +1,115 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
+npm i
 npm run dev
-# or
-yarn dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+class Node {
+  constructor(value) {
+    this.value = value;
+    this.left = null;
+    this.right = null;
+    this.parent = null;
+  }
+  smallestInBranch() {
+    let current = this;
+    while (current) {
+      if (!current.left) return current;
+      current = current.left;
+    }
+  }
+}
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+class BinaryTree {
+  constructor() {
+    this.root = null;
+  }
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+  insert(value) {
+    const newNode = new Node(value);
+    if (!this.root) {
+      this.root = newNode;
+      return this;
+    }
+    let current = this.root;
+    while (current) {
+      if (value === current.value) return undefined;
+      if (value > current.value) {
+        if (current.right) current = current.right;
+        else {
+          newNode.parent = current;
+          current.right = newNode;
+        }
+      } else {
+        if (current.left) current = current.left;
+        else {
+          newNode.parent = current;
+          current.left = newNode;
+        }
+      }
+    }
+  }
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+  biggestEl() {
+    let current = this.root;
+    while (current) {
+      if (!current.right) return current;
+      current = current.right;
+    }
+  }
+  toSortedArray() {
+    let arr = [];
+    let current = this.root;
+    const biggest = this.biggestEl().value;
+    let prev = null;
+    while (current.value !== biggest) {
+      current = current.smallestInBranch();
+      arr.push(current.value);
 
-## Learn More
+      if (current.right || current === this.root) {
+        if (current.right.value === prev) {
+          arr.pop();
+          prev = current.value;
+          current.right = null;
+        } else {
+          prev = current.value;
+          current = current.right;
+          continue;
+        }
+      }
+      if (!current.right) {
+        prev = current.value;
+        current = current.parent;
+        current.left = null;
+      }
+    }
+    arr.push(biggest);
+    return arr;
+  }
 
-To learn more about Next.js, take a look at the following resources:
+  balance() {
+    let newTree = new BinaryTree();
+    const sortedArr = this.toSortedArray();
+    const middle = Math.round(sortedArr.length / 2);
+    const rootEl = sortedArr[middle];
+    newTree.insert(rootEl);
+    for (let i = middle; i >= 0; i--) {
+      if (sortedArr[i] === rootEl) continue;
+      newTree.insert(sortedArr[i]);
+      newTree.insert(sortedArr[sortedArr.length - 1 - i]);
+    }
+    return newTree;
+  }
+}
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+let tree = new BinaryTree();
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+tree.insert(12);
+tree.insert(6);
+tree.insert(3);
+tree.insert(7);
+tree.insert(8);
+tree.insert(9);
+tree.insert(16);
+tree.insert(14);
+tree.insert(18);
+tree.insert(2);
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+console.log(tree.balance());
