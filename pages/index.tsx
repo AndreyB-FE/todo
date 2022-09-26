@@ -6,6 +6,7 @@ import Header from "../components/header";
 import FindSideBar from "../components/findSideBar";
 import { observer } from "mobx-react-lite";
 import logState from "../store/logState";
+import Calendar from "../components/calendar/calendar";
 
 interface homeProps {}
 
@@ -17,6 +18,7 @@ const Home = observer(() => {
           <Header></Header>
           <Flex justify={"space-between"}>
             <SideBar></SideBar>
+            <Calendar></Calendar>
             <FindSideBar></FindSideBar>
           </Flex>
         </>
