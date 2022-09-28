@@ -88,27 +88,66 @@ const Calendar: FC<calendarProps> = (props) => {
   };
 
   const getDaysArray = (date: Date) => {
-    let result = [];
-    const daysInMonth = defProps.numDays[date.getMonth()];
+    const setKeyDate = (month: Date, i: number) => {
+      return new Date(month.getFullYear(), month.getMonth(), i);
+    };
+    const getDaysInMonth = (thisMonth: Date) => {
+      const isYearLeapFeb = (thisMonth: Date) => {
+        if (thisMonth.getFullYear() % 4 === 0 && thisMonth.getMonth() === 1)
+          return true;
+
+        return false;
+      };
+      const daysInMonth = isYearLeapFeb(thisMonth)
+        ? 29
+        : defProps.numDays[thisMonth.getMonth()];
+      return daysInMonth;
+    };
+    let key = 0;
+    const getPrevMonthDays = (weekDay: number, date: Date) => {
+      const newDate = new Date(date.getFullYear(), date.getMonth() - 1);
+      let result = [];
+      const daysInPrevMonth = getDaysInMonth(newDate);
+      for (let i = daysInPrevMonth - weekDay + 1; i <= daysInPrevMonth; i++) {
+        result.push(<Day date={i} isCurrentMonth={false} key={key++}></Day>);
+      }
+      return result;
+    };
+    const getNextMonthDays = (thisMonth: Date) => {
+      let result = [];
+      const daysInMonth = getDaysInMonth(thisMonth);
+      const weekDay = new Date(
+        thisMonth.getFullYear(),
+        thisMonth.getMonth(),
+        daysInMonth
+      ).getDay();
+      for (let i = 1; i <= 6 - weekDay; i++) {
+        result.push(<Day date={i} isCurrentMonth={false} key={key++}></Day>);
+      }
+      return result;
+    };
+
+    const daysInMonth = getDaysInMonth(date);
     const weekDay = getWeekDay(date);
+    let result = getPrevMonthDays(weekDay, date);
     let day = 1;
     for (let i = 0; i < (daysInMonth + weekDay) / 7; i++) {
       for (let j = 0; j < 7; j++) {
-        if ((i === 0 && j < weekDay) || day > daysInMonth)
-          result.push(undefined);
-        else result.push(new Date(date.getFullYear(), date.getMonth(), day++));
+        if ((i === 0 && j < weekDay) || day > daysInMonth) continue;
+        else
+          result.push(
+            <Day date={day++} isCurrentMonth={true} key={key++}></Day>
+          );
       }
     }
-    return result;
+    return result.concat(getNextMonthDays(date));
   };
 
   const [dateState, setDateState] = useState({
     date: new Date(),
     selectedDate: null,
   });
-  const monthDays = getDaysArray(dateState.date);
 
-  console.log(getDaysArray(dateState.date));
   // useEffect(() => {
   //   let timer = setInterval(() => setCurrentDate(new Date()), 10000);
   //   return () => clearInterval(timer);
@@ -141,11 +180,7 @@ const Calendar: FC<calendarProps> = (props) => {
             {el}
           </span>
         ))}
-        {getDaysArray(dateState.date).map((el, id) => (
-          <div key={id} className="day">
-            {el?.getDate()}
-          </div>
-        ))}
+        {getDaysArray(dateState.date).map((el) => el)}
       </div>
     </StyledCalendar>
   );
