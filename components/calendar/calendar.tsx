@@ -5,16 +5,13 @@ import Flex from "../flex";
 import Day from "./day";
 
 const StyledCalendar = styled.div<calendarProps>`
-position relative;
   width: 100%;
-  padding: 0 5%;
   button {
     background-color: transparent;
     border: none;
     font-size: 40px;
     otline: none;
     position: absolute;
-    top: 50%;
   }
   .prev {
     left: 10px;
@@ -23,6 +20,11 @@ position relative;
     right: 10px;
   }
   .manage {
+    position relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
     height: 50px;
     background-color: lightblue;
     margin-top: 10px;
@@ -35,6 +37,13 @@ position relative;
     text-align:center;
     font-size: 25px;
     margin: 10px 0;
+  }
+  select{ 
+    padding:5px;
+    background-color: ${(props) => props.theme.colors.shadow};
+    border: 1px solid gray;
+    border-radius: 5px;
+    color: white;
   }
 `;
 
@@ -88,9 +97,6 @@ const Calendar: FC<calendarProps> = (props) => {
   };
 
   const getDaysArray = (date: Date) => {
-    const setKeyDate = (month: Date, i: number) => {
-      return new Date(month.getFullYear(), month.getMonth(), i);
-    };
     const getDaysInMonth = (thisMonth: Date) => {
       const isYearLeapFeb = (thisMonth: Date) => {
         if (thisMonth.getFullYear() % 4 === 0 && thisMonth.getMonth() === 1)
@@ -152,28 +158,65 @@ const Calendar: FC<calendarProps> = (props) => {
   //   let timer = setInterval(() => setCurrentDate(new Date()), 10000);
   //   return () => clearInterval(timer);
   // });
-
+  const onSelectHandler = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const { name, value } = event.target;
+    if (name === "months") {
+      let id = defProps.months.indexOf(value);
+      setDateState({
+        ...dateState,
+        date: new Date(dateState.date.getFullYear(), id),
+      });
+    } else {
+      setDateState({
+        ...dateState,
+        date: new Date(+value, dateState.date.getMonth()),
+      });
+    }
+  };
   return (
     <StyledCalendar {...props}>
-      <button
-        className="prev"
-        onClick={() => {
-          clickPrevMonthHandler();
-        }}
-      >
-        {"<"}
-      </button>
-      <button
-        className="next"
-        onClick={() => {
-          clickNextMonthHandler();
-        }}
-      >
-        {">"}
-      </button>
-      <div className="manage">{`${dateState.date.getDate()} ${
-        dateState.date.getMonth() + 1
-      } ${dateState.date.getFullYear()}`}</div>
+      <div className="manage">
+        <button
+          className="prev"
+          onClick={() => {
+            clickPrevMonthHandler();
+          }}
+        >
+          {"<"}
+        </button>
+        <button
+          className="next"
+          onClick={() => {
+            clickNextMonthHandler();
+          }}
+        >
+          {">"}
+        </button>
+        <select
+          name="months"
+          id="months"
+          value={defProps.months[dateState.date.getMonth()]}
+          onChange={(e) => {
+            onSelectHandler(e);
+          }}
+        >
+          {defProps.months.map((el, id) => (
+            <option key={id}>{el}</option>
+          ))}
+        </select>
+        <select
+          name="years"
+          id="years"
+          value={dateState.date.getFullYear()}
+          onChange={(e) => {
+            onSelectHandler(e);
+          }}
+        >
+          {defProps.years.map((el, id) => (
+            <option key={id}>{el}</option>
+          ))}
+        </select>
+      </div>
       <div className="days">
         {defProps.weekDays.map((el, id) => (
           <span className="day" key={id}>
