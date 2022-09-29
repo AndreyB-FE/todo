@@ -43,6 +43,7 @@ const SideBar: FC<sideBarProps> = ({}) => {
 export default SideBar;
 
 const StyledSideBar = styled.div`
+  z-index: 2;
   background-color: white;
   display: flex;
   height: ${(props) => props.theme.height.sides}vh;
