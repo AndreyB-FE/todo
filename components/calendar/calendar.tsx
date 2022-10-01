@@ -1,7 +1,8 @@
 import type { FC } from "react";
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import Flex from "../flex";
+import Select from "../select";
+import Icon from "../icon";
 import Day from "./day";
 
 const StyledCalendar = styled.div<calendarProps>`
@@ -83,14 +84,16 @@ const Calendar: FC<calendarProps> = (props) => {
       dateState.date.getFullYear(),
       dateState.date.getMonth() - 1
     );
-    setDateState({ ...dateState, date: newDate });
+    if (newDate.getFullYear() >= defProps.years[0])
+      setDateState({ ...dateState, date: newDate });
   };
   const clickNextMonthHandler = () => {
     const newDate = new Date(
       dateState.date.getFullYear(),
       dateState.date.getMonth() + 1
     );
-    setDateState({ ...dateState, date: newDate });
+    if (newDate.getFullYear() <= defProps.years[defProps.years.length - 1])
+      setDateState({ ...dateState, date: newDate });
   };
   const getWeekDay = (date: Date) => {
     return new Date(date.getFullYear(), date.getMonth(), 1).getDay();
@@ -176,46 +179,28 @@ const Calendar: FC<calendarProps> = (props) => {
   return (
     <StyledCalendar {...props}>
       <div className="manage">
-        <button
-          className="prev"
-          onClick={() => {
-            clickPrevMonthHandler();
-          }}
-        >
-          {"<"}
-        </button>
-        <button
-          className="next"
-          onClick={() => {
-            clickNextMonthHandler();
-          }}
-        >
-          {">"}
-        </button>
-        <select
+        <Icon
+          name=""
+          backgroundImage="./images/icons8-back-48.png"
+          clickHandler={clickPrevMonthHandler}
+        />
+        <Select
           name="months"
-          id="months"
           value={defProps.months[dateState.date.getMonth()]}
-          onChange={(e) => {
-            onSelectHandler(e);
-          }}
-        >
-          {defProps.months.map((el, id) => (
-            <option key={id}>{el}</option>
-          ))}
-        </select>
-        <select
+          options={defProps.months}
+          onChangeHandler={onSelectHandler}
+        ></Select>
+        <Select
           name="years"
-          id="years"
-          value={dateState.date.getFullYear()}
-          onChange={(e) => {
-            onSelectHandler(e);
-          }}
-        >
-          {defProps.years.map((el, id) => (
-            <option key={id}>{el}</option>
-          ))}
-        </select>
+          value={dateState.date.getFullYear().toString()}
+          options={defProps.years}
+          onChangeHandler={onSelectHandler}
+        ></Select>
+        <Icon
+          name="Contacts"
+          backgroundImage="./images/icons8-forward-48.png"
+          clickHandler={clickNextMonthHandler}
+        />
       </div>
       <div className="days">
         {defProps.weekDays.map((el, id) => (
