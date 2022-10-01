@@ -11,7 +11,7 @@ const StyledDay = styled.div<dayProps>`
   font-size: 25px;
   text-align: center;
   background-color: ${(props) =>
-    props.isCurrentMonth ? "white" : "lightgray"};
+    props.isCurrentMonth ? (props.isToday ? "pink" : "white") : "lightgray"};
   :hover {
     cursor: pointer;
     border-color: ${(props) =>
@@ -20,11 +20,13 @@ const StyledDay = styled.div<dayProps>`
 `;
 
 interface dayProps {
+  isToday?: boolean;
   date: number;
   isCurrentMonth: boolean;
 }
 
 const Day: FC<dayProps> = (props) => {
+  // console.log(props.isToday);
   const [isToday, setIsToday] = useState(false);
   return <StyledDay {...props}>{props.date?.toString()}</StyledDay>;
 };

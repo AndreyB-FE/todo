@@ -135,6 +135,14 @@ const Calendar: FC<calendarProps> = (props) => {
       }
       return result;
     };
+    const isToday = (date: Date) => {
+      const today = new Date();
+      return (
+        date.getDate() === today.getDate() &&
+        date.getMonth() === today.getMonth() &&
+        date.getFullYear() === today.getFullYear()
+      );
+    };
 
     const daysInMonth = getDaysInMonth(date);
     const weekDay = getWeekDay(date);
@@ -143,10 +151,20 @@ const Calendar: FC<calendarProps> = (props) => {
     for (let i = 0; i < (daysInMonth + weekDay) / 7; i++) {
       for (let j = 0; j < 7; j++) {
         if ((i === 0 && j < weekDay) || day > daysInMonth) continue;
-        else
+        else if (isToday(date) && day === date.getDate()) {
+          result.push(
+            <Day
+              date={day++}
+              isCurrentMonth={true}
+              key={key++}
+              isToday={true}
+            ></Day>
+          );
+        } else {
           result.push(
             <Day date={day++} isCurrentMonth={true} key={key++}></Day>
           );
+        }
       }
     }
     return result.concat(getNextMonthDays(date));
