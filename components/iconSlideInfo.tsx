@@ -8,8 +8,22 @@ const StyledSlide = styled.div<iconSlideInfoProps>`
   justify-content: center;
   transition: 0.3s;
   width: 250px;
+  border-left: 1px solid #eee;
   padding: 1rem 1rem 0;
 `;
+// color: ${(props: Object) => colors[props.name]};
+
+const colors = {
+  notes: "green",
+  tasks: "blue",
+  contacts: "red",
+};
+
+interface Colors {
+  notes: string;
+  tasks: string;
+  contacts: string;
+}
 
 interface iconSlideInfoProps {
   name: string;
