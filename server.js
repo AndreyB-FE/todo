@@ -1,6 +1,7 @@
 const sqlite3 = require('sqlite3').verbose();
+const bcrypt = require('bcryptjs');
 let sql;
-const db = new sqlite3.Database('./test.db',sqlite3.OPEN_READWRITE,(err)=>{
+const db = new sqlite3.Database('./todoAPP.db',sqlite3,(err)=>{
   if (err) return console.err(err.message);
 });  
 
@@ -8,8 +9,32 @@ const db = new sqlite3.Database('./test.db',sqlite3.OPEN_READWRITE,(err)=>{
 // db.run(sql);
 
 // sql = `DELETE FROM users WHERE id=?`;
-sql = `UPDATE users SET id=? WHERE id=?`
+// sql = `INSERT INTO users (userName,passwordHASH) VALUES (?,?)`
 
-db.run(sql,[2,3],(err)=>{
-  if (err) return console.err(err.message);
-});  
+const password = 'shrek2200211022000';
+// const name = 'andrei';
+
+sql = `SELECT * FROM users WHERE userName = ?`;
+
+
+async function compare(){
+  const promise = new Promise((res,rej)=>{
+    db.all(sql,['andrei'],(err,data)=>{
+      res(data[0]);
+    });
+  });
+  promise.then((user)=>{
+    const validPass = bcrypt.compare(password,user.passwordHash);
+    return validPass;
+  }).then((pass)=>{
+    return console.log(pass)
+  })
+}
+ compare();
+
+// async function insertHashData(){
+//   const hash = await bcrypt.hash(password,16);
+//   await db.run(sql,[name,hash]);
+// }
+// insertHashData();
+
