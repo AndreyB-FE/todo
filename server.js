@@ -55,20 +55,20 @@ app.post("/login", function (request, response) {
   sql = `SELECT * FROM users WHERE userName = ?`;
   const promise = new Promise((res,rej)=>{
     db.all(sql,[request.body.userName],(err,data)=>{
+      if(err) rej(err);
       res(data[0]);
     });
   });
   promise.then((user)=>{
-    if (!user) throw Error(data.status.toString());
+    if (!user) return false;
     const validPass = bcrypt.compare(request.body.password,user.passwordHash);
     return validPass;
   }).then((pass)=>{
     if(pass) return response.sendStatus(200)
-    else return response.sendStatus(208)
+    else return response.sendStatus(403)
   }).catch((e) => {
-    // rej(data);
+    console.log(e)
   });
-  console.log(req.body);
 });
  
  app.listen(PORT, () => {

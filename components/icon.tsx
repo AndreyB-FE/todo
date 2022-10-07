@@ -5,13 +5,13 @@ import HoverHint from "./hoverHint";
 
 const StyledIcon = styled.i<iconProps>`
     position: relative;
-    background-image: url(${(props) => props.backgroundImage});
+    background: url(${(props) => props.backgroundImage});
     width: 40px;
     height: 40px;
     background-color: transparent;
     background-repeat: no-repeat;
     background-position: center;
-    background-size: 20px 20px;
+    background-size: ${(props) => props.size || "20px 20px"};
     border-radius: 50%;
     display: flex;
     align-items: center;
@@ -25,6 +25,7 @@ const StyledIcon = styled.i<iconProps>`
 `;
 
 interface iconProps {
+  children?: JSX.Element;
   name: string;
   width?: string;
   height?: string;
@@ -33,6 +34,7 @@ interface iconProps {
   clickHandler: Function;
   hintPosition?: "right" | "bottom";
   backgroundImage: string;
+  size?: string;
 }
 
 const Icon: FC<iconProps> = (props) => {
@@ -44,13 +46,14 @@ const Icon: FC<iconProps> = (props) => {
       onMouseEnter={() => setIsHovered(true)}
       onClick={() => props.clickHandler(props.name)}
     >
-      {props.hintPosition && (
+      {(props.hintPosition && (
         <HoverHint
           text={props.name}
           isHovered={isHovered}
           position={props.hintPosition}
         />
-      )}
+      )) ||
+        props.children}
     </StyledIcon>
   );
 };

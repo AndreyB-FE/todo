@@ -19,7 +19,8 @@ const theme = {
   colors: {
     iconsHover: "#eee",
     shadow: "rgba(143, 188, 255,0.5)",
-    primary: "green",
+    primary: "lightblue",
+    primaryDark: "#599eb5",
   },
   height: {
     sides: 94,
