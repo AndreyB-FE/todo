@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const StyledShowPassword = styled.div<showPasswordProps>`
   position: absolute;
-  top: -2px;
+  bottom: 17px;
   right: 15px;
   width: 20px;
   height: 20px;

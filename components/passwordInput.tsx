@@ -6,10 +6,12 @@ import ShowPassword from "./showPassword";
 const StyledPasswordInput = styled.div<passwordInputProps>`
   position: relative;
   width: 100%;
+  text-align: left;
+  font-size: 0.5em;
   input {
     font-family: verdana;
     width: 100%;
-    height: 3vh;
+    height: 2rem;
     border: 1px solid ${(props) => props.theme.colors.primaryDark};
     border-radius: 3px;
     padding-left: 5px;
@@ -18,6 +20,12 @@ const StyledPasswordInput = styled.div<passwordInputProps>`
     :focus {
       border: 2px solid ${(props) => props.theme.colors.primaryDark};
     }
+    ::placeholder {
+      letter-spacing: 0;
+    }
+  }
+  label {
+    padding-left: 7px;
   }
 `;
 
@@ -26,7 +34,7 @@ interface passwordInputProps {
   type?: string;
   name: string;
   placeholder?: string;
-  ChangeHandler: Function;
+  inputHandler: Function;
   labelText?: string;
 }
 
@@ -37,11 +45,13 @@ const PasswordInput: FC<passwordInputProps> = (props) => {
   };
   return (
     <StyledPasswordInput {...props}>
+      {props.labelText && <label>{props.labelText}</label>}
       <input
-        {...props}
+        placeholder={props.placeholder}
+        name={props.name}
         type={isPasswordShowing ? "text" : "password"}
         onChange={(e) => {
-          props.ChangeHandler(e);
+          props.inputHandler(e);
         }}
       ></input>
       <ShowPassword clickHandler={onIconClick}></ShowPassword>
