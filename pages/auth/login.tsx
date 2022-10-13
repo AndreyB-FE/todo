@@ -1,9 +1,9 @@
 import type { FC } from "react";
 import { useState } from "react";
 import styled from "styled-components";
-import logState from "../store/logState";
+import logState from "../../store/logState";
 import { observer } from "mobx-react-lite";
-import LogInForm from "../components/logInForm";
+import LogInForm from "../../components/logInForm";
 
 const StyledRegistration = styled.div<registrationProps>``;
 

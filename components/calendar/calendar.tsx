@@ -199,7 +199,7 @@ const Calendar: FC<calendarProps> = (props) => {
       <div className="manage">
         <Icon
           name=""
-          backgroundImage="./images/icons8-back-48.png"
+          backgroundImage="../images/icons8-back-48.png"
           clickHandler={clickPrevMonthHandler}
         />
         <Select
@@ -216,7 +216,7 @@ const Calendar: FC<calendarProps> = (props) => {
         ></Select>
         <Icon
           name="Contacts"
-          backgroundImage="./images/icons8-forward-48.png"
+          backgroundImage="../images/icons8-forward-48.png"
           clickHandler={clickNextMonthHandler}
         />
       </div>
