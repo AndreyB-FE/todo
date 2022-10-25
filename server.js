@@ -8,7 +8,7 @@ const PORT = 8000;
 const app = express();
 const corsOptions ={
   origin:'*', 
-  credentials:true,            //access-control-allow-credentials:true
+  credentials:true,          
   optionSuccessStatus:200,
 }
 let sql;
@@ -23,11 +23,16 @@ const db = new sqlite3.Database('./todoAPP.db',sqlite3,(err)=>{
 // sql = `CREATE TABLE users(ID INTEGER PRIMARY KEY, userName,password)`;
 // db.run(sql);
 
-// sql = `DELETE FROM users WHERE id=?`;
+sql = `DELETE FROM users`;
 // sql = `INSERT INTO users (userName,passwordHASH) VALUES (?,?)`
 
-// const password = 'shrek2200211022000';
-// const name = 'andrei';
+const password = 'shrek2200211022000';
+const name = 'andrey';
+
+  db.all(sql,(err) => {
+    if (err) console.error(err);
+  }) 
+
 
 
 // async function compare(){
@@ -61,7 +66,7 @@ app.post("/login", function (request, response) {
   });
   promise.then((user)=>{
     if (!user) return false;
-    const validPass = bcrypt.compare(request.body.password,user.passwordHash);
+    const validPass = bcrypt.compare(request.body.password,user.password);
     return validPass;
   }).then((pass)=>{
     if(pass) return response.sendStatus(200)
@@ -70,13 +75,46 @@ app.post("/login", function (request, response) {
     console.log(e)
   });
 });
+
+app.post("/registration", function (request, response) {
+  console.log(request.body);
+  if (!request.body) return response.sendStatus(400);
+  sql = `SELECT * FROM users WHERE userName = ?`;
+  const promise = new Promise((res,rej)=>{
+    db.all(sql,[request.body.userName],(err,data)=>{
+      if(err) rej(err);
+      res(data[0]);
+    });
+  });
+  promise.then((user)=>{
+    console.log(user)
+    if (!user){
+      sql = `INSERT INTO users (userName,userEmail,password) VALUES (?,?,?)`
+      db.run(sql,[request.body.userName, request.body.userName,request.body.password],(err,data)=>{
+      if(err) console.log(err);
+      return (data);
+    });
+    }
+    else if (user.userName === request.body.userName) return response.sendStatus(409);
+    
+  }).then(()=>{
+    return response.sendStatus(200)
+  }).catch((e) => {
+    console.log(e)
+  });
+});
+
+
+// sql = `INSERT INTO users (userName,userEmail,password) VALUES (?,?,?)`
+
+// async function insertHashData(){
+//   const hash = await bcrypt.hash(password,16);
+//   await db.run(sql,[name,'andrei.228.bogushevich@gmail.com',hash]);
+// }
+// insertHashData();
  
  app.listen(PORT, () => {
      console.log(`The application is listening on port ${PORT}!`);
  })
-// async function insertHashData(){
-//   const hash = await bcrypt.hash(password,16);
-//   await db.run(sql,[name,hash]);
-// }
-// insertHashData();
+
 

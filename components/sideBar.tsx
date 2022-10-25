@@ -19,19 +19,19 @@ const SideBar: FC<sideBarProps> = ({}) => {
       <Flex direction="column" gap="15px" padding="10px">
         <Icon
           name="Notes"
-          backgroundImage="./images/icons8-notes-32.png"
+          backgroundImage="../images/icons8-notes-32.png"
           hintPosition={"right"}
           clickHandler={IconClickHandler}
         />
         <Icon
           name="Tasks"
-          backgroundImage="./images/icons8-checkmark-32.png"
+          backgroundImage="../images/icons8-checkmark-32.png"
           hintPosition={"right"}
           clickHandler={IconClickHandler}
         />
         <Icon
           name="Contacts"
-          backgroundImage="./images/icons8-google-contacts-32.png"
+          backgroundImage="../images/icons8-google-contacts-32.png"
           hintPosition={"right"}
           clickHandler={IconClickHandler}
         />

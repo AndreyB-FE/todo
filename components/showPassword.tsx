@@ -5,7 +5,7 @@ import { useState } from "react";
 
 const StyledShowPassword = styled.div<showPasswordProps>`
   position: absolute;
-  top: -2px;
+  bottom: 17px;
   right: 15px;
   width: 20px;
   height: 20px;
@@ -38,7 +38,7 @@ const ShowPassword: FC<showPasswordProps> = (props) => {
     >
       <Icon
         name={"eye"}
-        backgroundImage={"./images/icons8-eye-40.png"}
+        backgroundImage={"../images/icons8-eye-40.png"}
         size={"15px 15px"}
         color={"rgba(82, 145, 163, 0.3)"}
         clickHandler={onClickHandler}

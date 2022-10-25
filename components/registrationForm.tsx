@@ -8,7 +8,7 @@ import PasswordInput from "./passwordInput";
 import logState from "../store/logState";
 import MessageLabel from "./messageLabel";
 
-const StyledLogInForm = styled.div<logInFormProps>`
+const StyledRegistrationFrom = styled.div<registrationFormProps>`
   position: relative;
   margin: auto;
   margin-top: 30vh;
@@ -38,45 +38,36 @@ const StyledLogInForm = styled.div<logInFormProps>`
   }
 `;
 
-interface logInFormProps {}
+interface registrationFormProps {}
 
-interface loginForm {
-  userName: string;
-  password: string;
-}
+const RegistrationForm: FC<registrationFormProps> = (props) => {
+  const regForm = {
+    userName: "",
+    userEmail: "",
+    password: "",
+    repeatPassword: "",
+  };
 
-const LogInForm: FC<logInFormProps> = (props) => {
-  const [logForm, setLogForm] = useState({ userName: "", password: "" });
+  const [formData, setFormData] = useState(regForm);
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
   const onChangeHandler = (e: any) => {
     setErrorMessage("");
     const { name, value } = e.target;
-    setLogForm({ ...logForm, [name]: value });
+    setFormData({ ...formData, [name]: value });
   };
 
-  const validateForm = (loginForm: loginForm) => {
-    if (loginForm.userName.length < 3 || loginForm.userName.length > 16) {
-      setErrorMessage("Your username must contain between 3-16 characters!");
-      return false;
-    }
-    if (loginForm.password.length < 8) {
-      setErrorMessage("Your password must contain at least 8 characters!");
-      return false;
-    }
-    return true;
-  };
-
-  function logIn() {
-    if (!validateForm(logForm)) return false;
+  function registrate() {
+    // if (!validateForm(logForm)) return false;
     setIsLoading(true);
     const start = new Date().getTime();
-    fetch("http://localhost:8000/login", {
+    fetch("http://localhost:8000/registration", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(logForm),
+      body: JSON.stringify(formData),
     })
       .then((data: Response) => {
         if (!data) {
@@ -88,9 +79,8 @@ const LogInForm: FC<logInFormProps> = (props) => {
         if (data.status === 200) {
           setIsLoading(false);
           console.log("you are logged in");
-          logState.logIn(logForm);
-          console.log(logState.user);
-        } else if (data.status === 403) {
+          logState.logIn(formData);
+        } else if (data.status === 409) {
           const end = new Date().getTime();
           if (end - start < 1000) {
             console.log(1000 - end + start);
@@ -110,9 +100,10 @@ const LogInForm: FC<logInFormProps> = (props) => {
         console.log(e);
       });
   }
+
   return (
-    <StyledLogInForm>
-      Login
+    <StyledRegistrationFrom {...props}>
+      SIGN UP
       <Flex
         direction={"column"}
         gap={"12px"}
@@ -125,6 +116,12 @@ const LogInForm: FC<logInFormProps> = (props) => {
           inputHandler={onChangeHandler}
           labelText={"Username"}
         ></Input>
+        <Input
+          name={"userEmail"}
+          placeholder={"Type your e-mail"}
+          inputHandler={onChangeHandler}
+          labelText={"Email"}
+        ></Input>
         <PasswordInput
           name={"password"}
           type={"password"}
@@ -132,11 +129,18 @@ const LogInForm: FC<logInFormProps> = (props) => {
           inputHandler={onChangeHandler}
           labelText={"Password"}
         ></PasswordInput>
+        <PasswordInput
+          name={"repeatPassword"}
+          type={"password"}
+          placeholder={"Repeat your password"}
+          inputHandler={onChangeHandler}
+          labelText={"Repeat password"}
+        ></PasswordInput>
         <>{isLoading && <div className="loading"></div>}</>
         <MessageLabel messageText={errorMessage}></MessageLabel>
-        <Button ClickHandler={logIn}>LOGIN</Button>
+        <Button ClickHandler={registrate}>SIGN UP</Button>
       </Flex>
-    </StyledLogInForm>
+    </StyledRegistrationFrom>
   );
 };
-export default LogInForm;
+export default RegistrationForm;
