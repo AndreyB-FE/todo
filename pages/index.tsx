@@ -8,14 +8,14 @@ import { observer } from "mobx-react-lite";
 import logState from "../store/logState";
 import Calendar from "../components/calendar/calendar";
 import { useRouter } from "next/router";
-import Auth from "./auth/login";
+import Auth from "./login";
 
 interface homeProps {}
 
 const Home = observer(() => {
   const router = useRouter();
   useEffect(() => {
-    if (!logState.isLogged) router.push("/auth/login");
+    if (!logState.isLogged) router.push("/login");
   });
   return (
     <>

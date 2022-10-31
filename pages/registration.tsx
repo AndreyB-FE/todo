@@ -1,6 +1,6 @@
 import type { FC } from "react";
 import styled from "styled-components";
-import RegistrationFrom from "../../components/registrationForm";
+import RegistrationFrom from "../components/registrationForm";
 
 const StyledRegistration = styled.div<registrationProps>``;
 
